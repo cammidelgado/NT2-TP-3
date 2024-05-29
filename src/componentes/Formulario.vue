@@ -22,7 +22,7 @@
           <div v-if="(!formData.nombre || formData.nombre.length < 5 || formData.nombre.length > 15) && formDirty.nombre" class="alert alert-danger mt-1">
             <span v-if="!formData.nombre">Campo requerido</span> 
             <span v-else-if="formData.nombre.length < 5">El nombre debe poseer al menos 5 caracteres</span>
-            <span v-else>El nombre no debe poseer mas de 15 caracteres</span>
+            <span v-else>El nombre no debe poseer más de 15 caracteres</span>
           </div>
         </div>
 
@@ -55,8 +55,10 @@
             @input="formDirty.email=true"
           >
           <!-- carteles de validación -->
-          <div v-if="!formData.email && formDirty.email" class="alert alert-danger mt-1">
-            <span v-if="!formData.email">Campo requerido</span> 
+          <!-- https://regex101.com/r/SOgUIV/2   expresión regular para email-->
+          <div v-if="(!formData.email || !/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(formData.email)) && formDirty.email" class="alert alert-danger mt-1">
+            <span v-if="!formData.email">Campo requerido</span>
+            <span v-else>Email no válido</span> 
           </div>
         </div>
       
@@ -119,7 +121,7 @@
       validarBotonEnvio() {
         return (!this.formData.nombre || this.formData.nombre.length < 5 || this.formData.nombre.length > 15) ||
         (!this.formData.edad || this.formData.edad < 18 || this.formData.edad > 120) ||
-        !this.formData.email
+        (!this.formData.email || !/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(this.formData.email))
       },       
 
       enviar() {
